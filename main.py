@@ -7,7 +7,7 @@ import random  # Import the random module
 from myserver import server_on
 
 # Target user ID (replace with the actual user ID)
-TARGET_USER_ID = 
+
 
 # Target text channel ID (replace with the actual channel ID)
 TARGET_CHANNEL_ID = 1249285760713232424
@@ -22,34 +22,6 @@ intents.message_content = True  # Enable message content intent
 
 bot = commands.Bot(command_prefix='/', intents=intents)
 
-@bot.event
-async def on_ready():
-    print(f"Bot {bot.user} is online!")
-    await bot.tree.sync()
-    print("Commands synced")
-
-@bot.event
-async def on_voice_state_update(member, before, after):
-    if member.id == TARGET_USER_ID and after.channel:
-        wait_time = random.randint(10,60)  # Wait for a random number of seconds between 1 and 10
-        await asyncio.sleep(wait_time)
-        if member.voice and member.voice.channel:
-            original_channel = after.channel  # Get the voice channel object
-            await member.move_to(None)  # Disconnect the user from the voice channel
-            # Create an embed message
-            embed = discord.Embed(
-                title="ภารกิจเตะคน",
-                description=f"ไอ <@{member.id}> ถูกตัดการเชื่อมต่อ 😈.",
-                color=discord.Color.red()
-            )
-            embed.add_field(name="โดนเตะออกจากห้อง", value=f"<#{original_channel.id}>", inline=True)
-            embed.add_field(name="เวลาที่เชื่อมต่อ", value=f"{wait_time} วินาที", inline=True)
-            embed.set_footer(text="เตะคนปากหมาจำกัด")
-
-            # Send the embed message to the specified channel
-            notification_channel = bot.get_channel(NOTIFICATION_CHANNEL_ID)
-            if notification_channel:
-                await notification_channel.send(embed=embed)
 
 @bot.tree.command(name='hellobot', description='ไว้ให้บอททักทาย')
 async def hellocommand(interaction: discord.Interaction):
