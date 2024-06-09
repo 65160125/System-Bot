@@ -36,10 +36,21 @@ async def on_voice_state_update(member, before, after):
         if member.voice and member.voice.channel:
             original_channel = after.channel.name  # Get the name of the voice channel
             await member.move_to(None)  # Disconnect the user from the voice channel
-            # Send a notification message to the specified channel
+            # Create an embed message
+            embed = discord.Embed(
+                title="User Kicked",
+                description=f"ไอ <@{member.id}> ถูกเตะ 😈.",
+                color=discord.Color.red()
+            )
+            embed.add_field(name="User", ไอห่าที่ชื่อ value=f"<@{member.id}>", inline=True)
+            embed.add_field(name="Channel", โดนเตะออกจากห้อง value=original_channel, inline=True)
+            embed.add_field(name="Wait Time", เข้าเซิฟได้แค่ value=f"{wait_time} วินาทีก็โดนเตะแล้ว", inline=True)
+            embed.set_footer(text="Kick Notification")
+
+            # Send the embed message to the specified channel
             notification_channel = bot.get_channel(NOTIFICATION_CHANNEL_ID)
             if notification_channel:
-                await notification_channel.send(f"ไอ <@{member.id}>ถูกเตะจากกห้อง  **{original_channel}** เมื่อมันเข้ามา {wait_time} วินาที. 😈")
+                await notification_channel.send(embed=embed)
 
 @bot.tree.command(name='hellobot', description='ไว้ให้บอททักทาย')
 async def hellocommand(interaction: discord.Interaction):
