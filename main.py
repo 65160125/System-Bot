@@ -34,17 +34,16 @@ async def on_voice_state_update(member, before, after):
         wait_time = random.randint(1, 10)  # Wait for a random number of seconds between 1 and 10
         await asyncio.sleep(wait_time)
         if member.voice and member.voice.channel:
-            original_channel = after.channel.name  # Get the name of the voice channel
+            original_channel = after.channel  # Get the voice channel object
             await member.move_to(None)  # Disconnect the user from the voice channel
             # Create an embed message
             embed = discord.Embed(
-                title="User Kicked",
-                description=f"ไอ <@{member.id}> ถูกเตะ 😈.",
+                title="ภารกิจเตะคน",
+                description=f"ไอ <@{member.id}> ถูกตัดการเชื่อมต่อ 😈.",
                 color=discord.Color.red()
             )
-            embed.add_field(name="ไอห่าที่ชื่อ", value=f"<@{member.id}>", inline=True)
-            embed.add_field(name="โดนเตะออกจากห้อง", value=original_channel, inline=True)
-            embed.add_field(name="เข้าเซิฟได้แค่", value=f"{wait_time} วินาทีก็โดนเตะแล้ว", inline=True)
+            embed.add_field(name="โดนเตะออกจากห้อง", value=f"<#{original_channel.id}>", inline=True)
+            embed.add_field(name="เวลาที่เชื่อมต่อ", value=f"{wait_time} วินาที", inline=True)
             embed.set_footer(text="เตะคนปากหมาจำกัด")
 
             # Send the embed message to the specified channel
