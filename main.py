@@ -7,7 +7,7 @@ import random  # Import the random module
 from myserver import server_on
 
 # Target user ID (replace with the actual user ID)
-TARGET_USER_ID = 573884446680285184
+TARGET_USER_ID = 767056525708492840
 
 # Target text channel ID (replace with the actual channel ID)
 TARGET_CHANNEL_ID = 1249285760713232424
@@ -42,10 +42,10 @@ async def on_voice_state_update(member, before, after):
                 description=f"ไอ <@{member.id}> ถูกเตะ 😈.",
                 color=discord.Color.red()
             )
-            embed.add_field(name="User", ไอห่าที่ชื่อ value=f"<@{member.id}>", inline=True)
-            embed.add_field(name="Channel", โดนเตะออกจากห้อง value=original_channel, inline=True)
-            embed.add_field(name="Wait Time", เข้าเซิฟได้แค่ value=f"{wait_time} วินาทีก็โดนเตะแล้ว", inline=True)
-            embed.set_footer(text="Kick Notification")
+            embed.add_field(name="ไอห่าที่ชื่อ", value=f"<@{member.id}>", inline=True)
+            embed.add_field(name="โดนเตะออกจากห้อง", value=original_channel, inline=True)
+            embed.add_field(name="เข้าเซิฟได้แค่", value=f"{wait_time} วินาทีก็โดนเตะแล้ว", inline=True)
+            embed.set_footer(text="เตะคนปากหมาจำกัด")
 
             # Send the embed message to the specified channel
             notification_channel = bot.get_channel(NOTIFICATION_CHANNEL_ID)
