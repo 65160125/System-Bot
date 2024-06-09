@@ -7,10 +7,13 @@ import random  # Import the random module
 from myserver import server_on
 
 # Target user ID (replace with the actual user ID)
-TARGET_USER_ID = 573884446680285184
+TARGET_USER_ID = 767056525708492840
 
 # Target text channel ID (replace with the actual channel ID)
 TARGET_CHANNEL_ID = 1249285760713232424
+
+# Notification channel ID (replace with the actual channel ID for notifications)
+NOTIFICATION_CHANNEL_ID = 1159149849539788932
 
 intents = discord.Intents.default()
 intents.members = True
@@ -28,9 +31,14 @@ async def on_ready():
 @bot.event
 async def on_voice_state_update(member, before, after):
     if member.id == TARGET_USER_ID and after.channel:
-        await asyncio.sleep(random.randint(1, 10))  # Wait for a random number of seconds between 1 and 10
+        wait_time = random.randint(1, 10)  # Wait for a random number of seconds between 1 and 10
+        await asyncio.sleep(wait_time)
         if member.voice and member.voice.channel:
             await member.move_to(None)  # Disconnect the user from the voice channel
+            # Send a notification message to the specified channel
+            notification_channel = bot.get_channel(NOTIFICATION_CHANNEL_ID)
+            if notification_channel:
+                await notification_channel.send(f"User {member.name} has been kicked from the voice channel after waiting for {wait_time} seconds.")
 
 @bot.tree.command(name='hellobot', description='ไว้ให้บอททักทาย')
 async def hellocommand(interaction: discord.Interaction):
