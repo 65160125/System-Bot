@@ -7,7 +7,7 @@ import random  # Import the random module
 from myserver import server_on
 
 # Target user ID (replace with the actual user ID)
-TARGET_USER_ID = 573884446680285184
+TARGET_USER_ID = 767056525708492840
 
 # Target text channel ID (replace with the actual channel ID)
 TARGET_CHANNEL_ID = 1249285760713232424
