@@ -3,8 +3,8 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 import asyncio
+import random  # Import the random module
 from myserver import server_on
-
 
 # Target user ID (replace with the actual user ID)
 TARGET_USER_ID = 573884446680285184
@@ -28,7 +28,7 @@ async def on_ready():
 @bot.event
 async def on_voice_state_update(member, before, after):
     if member.id == TARGET_USER_ID and after.channel:
-        await asyncio.sleep(3)  # Wait for 3 seconds
+        await asyncio.sleep(random.randint(1, 10))  # Wait for a random number of seconds between 1 and 10
         if member.voice and member.voice.channel:
             await member.move_to(None)  # Disconnect the user from the voice channel
 
@@ -53,7 +53,6 @@ async def on_message(message):
             await message.channel.send("สวัสดีจ้า " + str(message.author.name))
         else:
             await message.channel.send("เราเพิ่งถูกพึ่งสร้างวันนี้ อย่าคาดหวังให้มันพิมพ์อะไรเยอะสิ อีกอย่าง เราไม่ใช่ Ai ด้วย !!!")
-
 
 server_on()
 
