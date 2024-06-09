@@ -7,7 +7,7 @@ from myserver import server_on
 
 
 # Target user ID (replace with the actual user ID)
-TARGET_USER_ID = 697411248370745445
+TARGET_USER_ID = 573884446680285184
 
 # Target text channel ID (replace with the actual channel ID)
 TARGET_CHANNEL_ID = 1249285760713232424
