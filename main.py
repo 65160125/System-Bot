@@ -7,7 +7,7 @@ import random  # Import the random module
 from myserver import server_on
 
 # Target user ID (replace with the actual user ID)
-TARGET_USER_ID = 767056525708492840
+TARGET_USER_ID = 573884446680285184
 
 # Target text channel ID (replace with the actual channel ID)
 TARGET_CHANNEL_ID = 1249285760713232424
@@ -34,11 +34,12 @@ async def on_voice_state_update(member, before, after):
         wait_time = random.randint(1, 10)  # Wait for a random number of seconds between 1 and 10
         await asyncio.sleep(wait_time)
         if member.voice and member.voice.channel:
+            original_channel = after.channel.name  # Get the name of the voice channel
             await member.move_to(None)  # Disconnect the user from the voice channel
             # Send a notification message to the specified channel
             notification_channel = bot.get_channel(NOTIFICATION_CHANNEL_ID)
             if notification_channel:
-                await notification_channel.send(f"User {member.name} has been kicked from the voice channel after waiting for {wait_time} seconds.")
+                await notification_channel.send(f"ไอ <@{member.id}>ถูกเตะจากกห้อง  **{original_channel}** เมื่อมันเข้ามา {wait_time} วินาที. 😈")
 
 @bot.tree.command(name='hellobot', description='ไว้ให้บอททักทาย')
 async def hellocommand(interaction: discord.Interaction):
