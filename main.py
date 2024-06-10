@@ -1,7 +1,6 @@
 import os
 import discord
 from discord.ext import commands
-import asyncio
 
 from myserver import server_on
 
@@ -24,6 +23,9 @@ async def on_voice_state_update(member, before, after):
             before_channel = before.channel
             after_channel = after.channel
             
+            # เก็บ ID ของผู้ใช้ที่ถูกย้ายไว้
+            moved_user_id = member.id
+            
             # Check for recent audit logs to find out who moved the member
             async for entry in member.guild.audit_logs(limit=10, action=discord.AuditLogAction.member_move):
                 if entry.target and entry.target.id == member.id:
@@ -31,7 +33,7 @@ async def on_voice_state_update(member, before, after):
                     notification_channel = bot.get_channel(NOTIFICATION_CHANNEL_ID)
                     if notification_channel:
                         await notification_channel.send(
-                            f'{member.name} ถูกย้ายจากห้อง {before_channel.name} ไปยังห้อง {after_channel.name} โดย {mover.name}'
+                            f'{member.name} (ID: {moved_user_id}) ถูกย้ายจากห้อง {before_channel.name} ไปยังห้อง {after_channel.name} โดย {mover.name}'
                         )
                     break
 
