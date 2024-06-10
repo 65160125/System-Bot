@@ -33,11 +33,20 @@ async def on_voice_state_update(member, before, after):
     # ตรวจสอบว่ามีการย้ายห้องเสียง
     if before.channel != after.channel:
         if before.channel is not None and after.channel is not None:
-            notification_channel = bot.get_channel(NOTIFICATION_CHANNEL_ID)
-            if notification_channel:
-                await notification_channel.send(
-                    f'{member.name} ถูกย้ายจากห้อง {before.channel.name} ไปยังห้อง {after.channel.name} โดย {member.guild.me.display_name}'
-                )
+            # Get the member's previous and current channels
+            before_channel = before.channel
+            after_channel = after.channel
+            
+            # Check for recent audit logs to find out who moved the member
+            async for entry in member.guild.audit_logs(limit=1, action=discord.AuditLogAction.member_move):
+                if entry.target.id == member.id:
+                    mover = entry.user
+                    notification_channel = bot.get_channel(NOTIFICATION_CHANNEL_ID)
+                    if notification_channel:
+                        await notification_channel.send(
+                            f'{member.name} ถูกย้ายจากห้อง {before_channel.name} ไปยังห้อง {after_channel.name} โดย {mover.name}'
+                        )
+                    break
 
 server_on()
 
