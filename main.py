@@ -1,42 +1,49 @@
-import os
 import discord
-from discord.ext import commands
-
 from myserver import server_on
 
-# รหัสช่องแจ้งเตือน (แทนที่ด้วยรหัสช่องจริง)
-NOTIFICATION_CHANNEL_ID = 1159149849539788932
+# รหัสโทเค็นบอทของคุณ
+BOT_TOKEN = os.getenv('BOT_TOKEN')
 
-intents = discord.Intents.default()
-intents.members = True
-intents.voice_states = True
-intents.message_content = True  # เปิดการใช้งาน intent การเนื้อหาข้อความ
+# รหัสช่อง Discord ที่ต้องการแจ้งเตือน
+ALERT_CHANNEL_ID = 1159149849539788932
 
-bot = commands.Bot(command_prefix='/', intents=intents)
+# สร้าง Client Discord
+client = discord.Client()
 
-@bot.event
-async def on_voice_state_update(member, before, after):
-    # ตรวจสอบว่ามีการย้ายห้องเสียง
-    if before.channel != after.channel:
-        if before.channel is not None and after.channel is not None:
-            # รับช่องเสียงก่อนหน้าและช่องเสียงปัจจุบันของสมาชิก
-            before_channel = before.channel
-            after_channel = after.channel
-            
-            # เก็บ ID ของผู้ใช้ที่ถูกย้ายไว้
-            moved_user_id = member.id
-            
-            # Check for recent audit logs to find out who moved the member
-            async for entry in member.guild.audit_logs(limit=10, action=discord.AuditLogAction.member_move):
-                if entry.target and entry.target.id == member.id:
-                    mover = entry.user
-                    notification_channel = bot.get_channel(NOTIFICATION_CHANNEL_ID)
-                    if notification_channel:
-                        await notification_channel.send(
-                            f'{member.name} (ID: {moved_user_id}) ถูกย้ายจากห้อง {before_channel.name} ไปยังห้อง {after_channel.name} โดย {mover.name}'
-                        )
-                    break
+# เก็บสถานะของสมาชิกในแต่ละห้องเสียง
+member_states = {}
 
-server_on()
+# ฟังก์ชันจัดการเหตุการณ์สมาชิกย้ายห้อง
+async def on_member_move(before, after):
+  # ตรวจสอบว่าสมาชิกย้ายจากห้องเสียงหรือไม่
+  if before.voice_channel and after.voice_channel:
+    # ตรวจสอบว่าสมาชิกย้ายจากห้องไหนไปห้องไหน
+    if before.voice_channel.id != after.voice_channel.id:
+      # บันทึกสถานะของสมาชิกก่อนย้าย
+      member_states[before.id] = before.voice_channel.id
 
-bot.run(os.getenv('BOT_TOKEN'))
+      # ตรวจสอบว่าใครเป็นผู้ย้าย
+      if after.voice_channel.id not in member_states[after.id]:
+        mover_id = after.id  # สมาชิกที่ย้าย
+      else:
+        mover_id = None  # ไม่สามารถระบุผู้ย้ายได้
+
+      # สร้างข้อความแจ้งเตือน
+      if mover_id:
+        mover = client.get_user(mover_id)
+        message = f"{mover.name} ย้าย {before.name} จาก {before.voice_channel.name} ไปยัง {after.voice_channel.name}"
+      else:
+        message = f"{before.name} ย้ายจาก {before.voice_channel.name} ไปยัง {after.voice_channel.name} (ไม่สามารถระบุผู้ย้ายได้)"
+
+      # ส่งข้อความแจ้งเตือนไปยังช่องที่กำหนด
+      alert_channel = client.get_channel(ALERT_CHANNEL_ID)
+      await alert_channel.send(message)
+
+# ฟังก์ชัน `on_ready`
+@client.event
+async def on_ready():
+  print(f"Logged in as {client.user}")
+  server_on()
+
+# เชื่อมต่อบอทกับ Discord
+client.run(BOT_TOKEN)
