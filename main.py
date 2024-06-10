@@ -28,28 +28,6 @@ async def on_ready():
     await bot.tree.sync()
     print("Commands synced")
 
-@bot.event
-async def on_voice_state_update(member, before, after):
-    if member.id == TARGET_USER_ID and after.channel:
-        wait_time = random.randint(400, 600)  # Wait for a random number of seconds between 1 and 10
-        await asyncio.sleep(wait_time)
-        if member.voice and member.voice.channel:
-            original_channel = after.channel  # Get the voice channel object
-            await member.move_to(None)  # Disconnect the user from the voice channel
-            # Create an embed message
-            embed = discord.Embed(
-                title="ภารกิจเตะคน",
-                description=f"ไอ <@{member.id}> ถูกตัดการเชื่อมต่อ 😈.",
-                color=discord.Color.red()
-            )
-            embed.add_field(name="โดนเตะออกจากห้อง", value=f"<#{original_channel.id}>", inline=True)
-            embed.add_field(name="เวลาที่เชื่อมต่อ", value=f"{wait_time} วินาที", inline=True)
-            embed.set_footer(text="เตะคนปากหมาจำกัด")
-
-            # Send the embed message to the specified channel
-            notification_channel = bot.get_channel(NOTIFICATION_CHANNEL_ID)
-            if notification_channel:
-                await notification_channel.send(embed=embed)
 
 @bot.tree.command(name='hellobot', description='ไว้ให้บอททักทาย')
 async def hellocommand(interaction: discord.Interaction):
@@ -71,7 +49,7 @@ async def on_message(message):
         if mes == 'สวัสดี':
             await message.channel.send("สวัสดีจ้า " + str(message.author.name))
         else:
-            await message.channel.send("เราเพิ่งถูกพึ่งสร้างวันนี้ อย่าคาดหวังให้มันพิมพ์อะไรเยอะสิ อีกอย่าง เราไม่ใช่ Ai ด้วย !!!")
+            await message.channel.send("เราเพิ่งถูกพึ่งสร้างไม่กี่วัน อย่าคาดหวังให้มันพิมพ์อะไรเยอะสิ อีกอย่าง เราไม่ใช่ Ai ด้วย !!!")
 
 server_on()
 
