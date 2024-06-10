@@ -1,8 +1,7 @@
 import discord
 from myserver import server_on
 
-# รหัสโทเค็นบอทของคุณ
-BOT_TOKEN = os.getenv('BOT_TOKEN')
+
 
 # รหัสช่อง Discord ที่ต้องการแจ้งเตือน
 ALERT_CHANNEL_ID = 1159149849539788932
@@ -46,4 +45,4 @@ async def on_ready():
   server_on()
 
 # เชื่อมต่อบอทกับ Discord
-client.run(BOT_TOKEN)
+bot.run(os.getenv('BOT_TOKEN'))
