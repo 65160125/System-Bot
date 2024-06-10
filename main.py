@@ -44,12 +44,12 @@ async def on_message(message):
 @bot.event
 async def on_voice_state_update(member, before, after):
   # ตรวจสอบว่ามีการย้ายห้องเสียง
-  if before.voice.channel != after.voice.channel:
-    if before.voice.channel is not None and after.voice.channel is not None:
+  if before.channel != after.channel:
+    if before.channel is not None and after.channel is not None:
       notification_channel = bot.get_channel(NOTIFICATION_CHANNEL_ID)
       if notification_channel:
         await notification_channel.send(
-          f'{member.name} ถูกย้ายจากห้อง {before.voice.channel.name} ไปยังห้อง {after.voice.channel.name} โดย {member.guild.me.display_name}'
+          f'{member.name} ถูกย้ายจากห้อง {before.channel.name} ไปยังห้อง {after.channel.name} โดย {member.guild.me.display_name}'
         )
 
 
