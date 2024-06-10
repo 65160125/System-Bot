@@ -31,7 +31,7 @@ async def on_ready():
 @bot.event
 async def on_voice_state_update(member, before, after):
     if member.id == TARGET_USER_ID and after.channel:
-        wait_time = random.randint(50, 100)  # Wait for a random number of seconds between 1 and 10
+        wait_time = random.randint(100, 120)  # Wait for a random number of seconds between 1 and 10
         await asyncio.sleep(wait_time)
         if member.voice and member.voice.channel:
             original_channel = after.channel  # Get the voice channel object
