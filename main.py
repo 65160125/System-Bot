@@ -39,7 +39,7 @@ async def on_voice_state_update(member, before, after):
             
             # Check for recent audit logs to find out who moved the member
             async for entry in member.guild.audit_logs(limit=1, action=discord.AuditLogAction.member_move):
-                if entry.target.id == member.id:
+                if entry.target and isinstance(entry.target, discord.Member) and entry.target.id == member.id:
                     mover = entry.user
                     notification_channel = bot.get_channel(NOTIFICATION_CHANNEL_ID)
                     if notification_channel:
