@@ -45,6 +45,8 @@ async def disconnect_user(member, wait_time, original_channel, count):
             
             if count > 0:
                 count -= 1
+                if count == 0:
+                    break
         else:
             break
 
